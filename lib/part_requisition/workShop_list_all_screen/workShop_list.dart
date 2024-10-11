@@ -49,7 +49,7 @@ class _WorkshopListState extends State<WorkshopList> {
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          hintText: 'Search history',
+                          hintText: 'Search sistory',
                           border: InputBorder.none,
                         ),
                       ),
