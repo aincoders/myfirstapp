@@ -27,7 +27,7 @@ class _WorkshopListState extends State<WorkshopList> {
               }
             },
             itemBuilder: (context) =>
-                [const PopupMenuItem(value: 0, child: Text('help'))],
+                [const PopupMenuItem(value: 0, child: Text('Need help'))],
           ),
         ],
       ),
