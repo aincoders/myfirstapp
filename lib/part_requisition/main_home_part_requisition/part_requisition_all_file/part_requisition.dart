@@ -5,6 +5,8 @@ import 'package:myfirstapp/part_requisition/history_order_list.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_list_data.dart';
 import 'package:myfirstapp/part_requisition/order_list_all_screen/order_list.dart';
 
+import '../../../filter_all_files/filter.dart';
+
 class PartRequisition extends StatefulWidget {
   const PartRequisition({super.key});
 
@@ -153,6 +155,11 @@ class _PartRequisitionState extends State<PartRequisition> {
               child: Row(
                 children: [
                   Expanded(
+              child: InkWell(
+              onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => CarPartListScreen()));
+            },
                     child: Card(
                       elevation: 0.0,
                       shape: RoundedRectangleBorder(
@@ -187,6 +194,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                         ),
                       ),
                     ),
+              ),
                   ),
                   Expanded(
                     child: InkWell(
