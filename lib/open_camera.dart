@@ -8,7 +8,7 @@ class OpenCamera extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Camera Picker',
+      title: 'Camera Piker',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
