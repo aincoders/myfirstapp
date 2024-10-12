@@ -44,11 +44,10 @@ class _PartRequisitionState extends State<PartRequisition> {
   // }
   void filterParts() {
     String searchText = searchController.text.toLowerCase();
-
     setState(() {
       partRequisitionDataLists = partRequisitionDataList.where((part) {
         bool matchesFilter = filter == 'All' || part.status == filter;
-        bool matchesSearch = part.prNo.toLowerCase().contains(searchText);
+        bool matchesSearch = part.status.toLowerCase().contains(searchText);
         return matchesFilter && matchesSearch;
       }).toList();
     });
