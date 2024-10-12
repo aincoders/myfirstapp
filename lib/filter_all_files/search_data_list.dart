@@ -1,0 +1,14 @@
+import 'package:myfirstapp/filter_all_files/search_data_model.dart';
+
+List<SearchDataModel> SearchDataModels = [
+  SearchDataModel(prNo: 'PR - 0001', status: 'PENDING', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0002', status: 'SUBMITTED', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0003', status: 'PENDING', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0004', status: 'SUBMITTED', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0005', status: 'PENDING', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0006', status: 'SUBMITTED', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0007', status: 'SUBMITTED', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0008', status: 'PENDING', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0009', status: 'SUBMITTED', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+  SearchDataModel(prNo: 'PR - 0010', status: 'PENDING', carCompany: 'Hyundai', carModel: 'i10', carFuel: 'Petrol', date: '14 JUN 2024', notes: 'I think I need my brake pads changed and hear sound when I turn.', item_1: 'Air Filter', item_2: 'Oil', item_3: 'Oil filter'),
+];

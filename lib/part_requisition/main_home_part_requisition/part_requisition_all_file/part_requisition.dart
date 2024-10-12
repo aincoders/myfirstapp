@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
-import 'package:myfirstapp/filter_all_files/filter_data_list.dart';
 import 'package:myfirstapp/part_requisition/add_to_quote.dart';
 import 'package:myfirstapp/part_requisition/history_order_list.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_data_model.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_list_data.dart';
 import 'package:myfirstapp/part_requisition/order_list_all_screen/order_list.dart';
-import '../../../filter_all_files/filter.dart';
+
+import '../../../filter_all_files/search_bar_filter.dart';
 
 class PartRequisition extends StatefulWidget {
   const PartRequisition({super.key});
@@ -17,29 +16,60 @@ class PartRequisition extends StatefulWidget {
 }
 
 class _PartRequisitionState extends State<PartRequisition> {
-  List<String> filterList = <String>['One', 'Two', 'Three', 'Four'];
-  bool isSubmit = true;
   String filter = 'All';
   List<PartRequisitionDataModel> partRequisitionDataLists = [];
-
+  TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    partRequisitionDataLists = partRequisitionDataList; // Initialize with all items
+    // partRequisitionDataLists = partRequisitionDataList;
+
+    partRequisitionDataLists = List.from(partRequisitionDataList);
+
+    // Initialize with all items
   }
 
-  void filterWorkShop(String status) {
+  // void filterWorkShop(String status) {
+  //   setState(() {
+  //     if (status == 'All') {
+  //       partRequisitionDataLists = partRequisitionDataList;
+  //     } else {
+  //       partRequisitionDataLists = partRequisitionDataList
+  //           .where((part) => part.status == status)
+  //           .toList();
+  //     }
+  //     filter = status;
+  //   });
+  // }
+  void filterParts() {
+    String searchText = searchController.text.toLowerCase();
+
     setState(() {
-      if (status == 'All') {
-        partRequisitionDataLists = partRequisitionDataList;
-      } else {
-        partRequisitionDataLists = partRequisitionDataList.where((part) => part.status == status).toList();
-      }
-      filter = status;
+      partRequisitionDataLists = partRequisitionDataList.where((part) {
+        bool matchesFilter = filter == 'All' || part.status == filter;
+        bool matchesSearch = part.prNo.toLowerCase().contains(searchText);
+        return matchesFilter && matchesSearch;
+      }).toList();
     });
   }
-
+  // Future<void> _openCamera() async {
+  //   DropdownButton<String>(
+  //     value: filter,
+  //     icon: Icon(Icons.arrow_drop_down),
+  //     underline: SizedBox(),              // Removes the underline
+  //     items: <String>['All', 'PENDING', 'SUBMITTED'].map((String value) {
+  //       return DropdownMenuItem<String>(
+  //         value: value,
+  //         child: Text(value, style: Theme.of(context).textTheme.bodySmall),
+  //       );
+  //     }).toList(),
+  //     onChanged: (String? newValue) {
+  //       filterWorkShop(newValue!); // Filter the list when a new value is selected
+  //     },
+  //
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -56,48 +86,55 @@ class _PartRequisitionState extends State<PartRequisition> {
               child: Row(
                 children: <Widget>[
                   const SizedBox(width: 16),
-                  GestureDetector(
-                    child: Card(
-                      elevation: 0.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                          side: const BorderSide(
-                              width: 0.0, color: Colors.orange)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Row(
-                          children: [
-                            const SizedBox(width: 8),
-                            Text(
-                              "Workshop",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: Colors.orange),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              height: 30,  // Adjust this value to decrease the height
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              color: Colors.red,
-                              child: DropdownButton<String>(
+                  Card(
+                    elevation: 0.0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        side:
+                            const BorderSide(width: 0.0, color: Colors.orange)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                          height: 30,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Workshop",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(color: Colors.orange),
+                              ),
+                              const SizedBox(width: 8),
+                              DropdownButton<String>(
                                 value: filter,
-                                icon: Icon(Icons.arrow_drop_down),
-                                underline: SizedBox(),              // Removes the underline
-                                items: <String>['All', 'PENDING', 'SUBMITTED'].map((String value) {
+                                icon: const Icon(Icons.arrow_drop_down),
+                                underline: const SizedBox(),
+                                // Removes the underline
+                                items: <String>[
+                                  'All',
+                                  'PENDING',
+                                  'SUBMITTED',
+                                  'ali'
+                                ].map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
-                                    child: Text(value, style: Theme.of(context).textTheme.bodySmall),
+                                    child: Text(value,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall),
                                   );
                                 }).toList(),
-                                onChanged: (String? newValue) {
-                                  filterWorkShop(newValue!); // Filter the list when a new value is selected
+                                onChanged: (value) {
+                                  setState(() {
+                                    filter = value!;
+                                    filterParts(); // Apply filter when dropdown changes
+                                  });
                                 },
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          )),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -124,7 +161,8 @@ class _PartRequisitionState extends State<PartRequisition> {
                                 ),
                                 SizedBox(width: 8),
                                 Text("Ascending",
-                                    style: Theme.of(context).textTheme.bodySmall),
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
                                 SizedBox(width: 8),
                                 Icon(Symbols.arrow_drop_down)
                               ],
@@ -178,10 +216,14 @@ class _PartRequisitionState extends State<PartRequisition> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: searchController,
                         decoration: const InputDecoration(
                           hintText: 'Search history',
                           border: InputBorder.none,
                         ),
+                        onChanged: (value) {
+                          filterParts(); // Apply search filter as the user types
+                        },
                       ),
                     ),
                   ],
@@ -193,46 +235,46 @@ class _PartRequisitionState extends State<PartRequisition> {
               child: Row(
                 children: [
                   Expanded(
-              child: InkWell(
-              onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CarPartListScreen()));
-            },
-                    child: Card(
-                      elevation: 0.0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6)),
-                      color: Colors.orange,
-                      child: const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.outbound_outlined,
-                              color: Colors.white,
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Total Requested",
-                                      style: TextStyle(
-                                          fontSize: 10, color: Colors.white)),
-                                  Text(
-                                    "10",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
-                                  ),
-                                ],
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CarPartsListPage()));
+                      },
+                      child: Card(
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(6)),
+                        color: Colors.orange,
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.outbound_outlined,
+                                color: Colors.white,
                               ),
-                            ),
-                          ],
+                              SizedBox(width: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Total Requested",
+                                        style: TextStyle(
+                                            fontSize: 10, color: Colors.white)),
+                                    Text(
+                                      "10",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-              ),
                   ),
                   Expanded(
                     child: InkWell(
@@ -325,9 +367,12 @@ class _PartRequisitionState extends State<PartRequisition> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 children: [
-                   Expanded(
+                  Expanded(
                       child: Text("Open Requist",
-                          style:Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold))),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.bold))),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
@@ -335,9 +380,11 @@ class _PartRequisitionState extends State<PartRequisition> {
                     },
                     child: Row(
                       children: [
-                        Text(
-                          "History",
-                            style:Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.orange)                        ),
+                        Text("History",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: Colors.orange)),
                         Icon(Icons.keyboard_arrow_right, color: Colors.orange)
                       ],
                     ),
@@ -346,148 +393,165 @@ class _PartRequisitionState extends State<PartRequisition> {
               ),
             ),
             const Divider(),
-            ListView.separated(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                itemCount: partRequisitionDataLists.length,
-                itemBuilder: (context, index) {
-                  final item = partRequisitionDataLists[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 18, vertical: 12),
-                    child: Column(
-                      children: [
-                        Row(
+            partRequisitionDataLists.isNotEmpty
+                ? ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: partRequisitionDataLists.length,
+                    itemBuilder: (context, index) {
+                      final item = partRequisitionDataLists[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 18, vertical: 12),
+                        child: Column(
                           children: [
-                            Text(
-                              item.prNo!,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(color: Colors.red),
-                            ),
-                            const SizedBox(width: 4),
-                            const Text("-"),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                item.status,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(
-                                        color: item.status == "PENDING"
-                                            ? Colors.orange
-                                            : Colors.green),
-                              ),
-                            ),
-                            const Badge(
-                              label: Text("5"),
-                              child: Icon(Icons.question_answer_outlined),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.directions_car_outlined,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            Expanded(
-                              child: Text(
-                                "${item.carCompany}, ${item.carModel}, ${item.carFuel}",
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 26,
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.calendar_month,
-                              size: 18,
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              "Due Date",
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.red),
-                            ),
-                            const SizedBox(width: 4),
-                            const Text(":"),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                item.date!,
-                                style: Theme.of(context).textTheme.labelLarge,
-
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 6),
-                        Container(
-                          margin: const EdgeInsets.only(right: 32),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.record_voice_over,
-                                size: 18,
-                              ),
-                              const SizedBox(width: 6),
-                              Expanded(
-                                child: Text(
-                                  item.notes!,
-                                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                            Row(
+                              children: [
+                                Text(
+                                  item.prNo!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(color: Colors.red),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Card(
-                            color: Colors.yellow.shade100,
-                            elevation: 0.0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
+                                const SizedBox(width: 4),
+                                const Text("-"),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    item.status,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(
+                                            color: item.status == "PENDING"
+                                                ? Colors.orange
+                                                : Colors.green),
+                                  ),
+                                ),
+                                const Badge(
+                                  label: Text("5"),
+                                  child: Icon(Icons.question_answer_outlined),
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.directions_car_outlined,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    "${item.carCompany}, ${item.carModel}, ${item.carFuel}",
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 26,
+                                )
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month,
+                                  size: 18,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  "Due Date",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(color: Colors.red),
+                                ),
+                                const SizedBox(width: 4),
+                                const Text(":"),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    item.date!,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            Container(
+                              margin: const EdgeInsets.only(right: 32),
                               child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                   Text("Requested item",
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                  const Icon(
+                                    Icons.record_voice_over,
+                                    size: 18,
                                   ),
-                                  const SizedBox(
-                                    width: 6,
-                                  ),
-                                  const Text(":"),
-
+                                  const SizedBox(width: 6),
                                   Expanded(
                                     child: Text(
-                                      " ${item.item_1}, ${item.item_2}, ${item.item_3}",
-                                      style: Theme.of(context).textTheme.bodyMedium,
-
+                                      item.notes!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(color: Colors.grey),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              child: Card(
+                                color: Colors.yellow.shade100,
+                                elevation: 0.0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Requested item",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
+                                      ),
+                                      const SizedBox(
+                                        width: 6,
+                                      ),
+                                      const Text(":"),
+                                      Expanded(
+                                        child: Text(
+                                          " ${item.item_1}, ${item.item_2}, ${item.item_3}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider();
+                    })
+                : Center(
+                    child: Text(
+                      "Data Not Found !!",
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider();
-                }),
+                  )
           ],
         ),
       ),
