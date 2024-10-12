@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:myfirstapp/part_requisition/add_to_quote.dart';
@@ -24,10 +26,7 @@ class _PartRequisitionState extends State<PartRequisition> {
   void initState() {
     super.initState();
     // partRequisitionDataLists = partRequisitionDataList;
-
     partRequisitionDataLists = List.from(partRequisitionDataList);
-
-    // Initialize with all items
   }
 
   // void filterWorkShop(String status) {
@@ -44,10 +43,11 @@ class _PartRequisitionState extends State<PartRequisition> {
   // }
   void filterParts() {
     String searchText = searchController.text.toLowerCase();
+    String searchNumber = searchController.text.toLowerCase();
     setState(() {
       partRequisitionDataLists = partRequisitionDataList.where((part) {
         bool matchesFilter = filter == 'All' || part.status == filter;
-        bool matchesSearch = part.status.toLowerCase().contains(searchText);
+        bool matchesSearch = part.prNo.toLowerCase().contains(searchText);
         return matchesFilter && matchesSearch;
       }).toList();
     });
@@ -127,7 +127,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                                 }).toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    filter = value!;
+                                    filter = value?? "";
                                     filterParts(); // Apply filter when dropdown changes
                                   });
                                 },
@@ -217,7 +217,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                       child: TextFormField(
                         controller: searchController,
                         decoration: const InputDecoration(
-                          hintText: 'Search history',
+                          hintText: 'Search Orders',
                           border: InputBorder.none,
                         ),
                         onChanged: (value) {
