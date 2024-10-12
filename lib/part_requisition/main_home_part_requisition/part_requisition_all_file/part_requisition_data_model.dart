@@ -1,6 +1,6 @@
 class PartRequisitionDataModel {
   final String prNo;
-  final String pending;
+  final String status;
   final String carCompany;
   final String carModel;
   final String carFuel;
@@ -12,7 +12,7 @@ class PartRequisitionDataModel {
 
   PartRequisitionDataModel({
     required this.prNo,
-    required this.pending,
+    required this.status,
     required this.carCompany,
     required this.carModel,
     required this.carFuel,

@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:myfirstapp/filter_all_files/filter_data_list.dart';
 import 'package:myfirstapp/part_requisition/add_to_quote.dart';
 import 'package:myfirstapp/part_requisition/history_order_list.dart';
+import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_data_model.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_list_data.dart';
 import 'package:myfirstapp/part_requisition/order_list_all_screen/order_list.dart';
-
 import '../../../filter_all_files/filter.dart';
 
 class PartRequisition extends StatefulWidget {
@@ -17,6 +19,27 @@ class PartRequisition extends StatefulWidget {
 class _PartRequisitionState extends State<PartRequisition> {
   List<String> filterList = <String>['One', 'Two', 'Three', 'Four'];
   bool isSubmit = true;
+  String filter = 'All';
+  List<PartRequisitionDataModel> partRequisitionDataLists = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    partRequisitionDataLists = partRequisitionDataList; // Initialize with all items
+  }
+
+  void filterWorkShop(String status) {
+    setState(() {
+      if (status == 'All') {
+        partRequisitionDataLists = partRequisitionDataList;
+      } else {
+        partRequisitionDataLists = partRequisitionDataList.where((part) => part.status == status).toList();
+      }
+      filter = status;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +64,10 @@ class _PartRequisitionState extends State<PartRequisition> {
                           side: const BorderSide(
                               width: 0.0, color: Colors.orange)),
                       child: Padding(
-                        padding: EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(0),
                         child: Row(
                           children: [
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
                               "Workshop",
                               style: Theme.of(context)
@@ -53,10 +76,25 @@ class _PartRequisitionState extends State<PartRequisition> {
                                   ?.copyWith(color: Colors.orange),
                             ),
                             SizedBox(width: 8),
-                            Text("All",
-                                style: Theme.of(context).textTheme.bodySmall),
-                            SizedBox(width: 8),
-                            Icon(Symbols.arrow_drop_down)
+                            Container(
+                              height: 30,  // Adjust this value to decrease the height
+                              padding: EdgeInsets.symmetric(horizontal: 8),
+                              color: Colors.red,
+                              child: DropdownButton<String>(
+                                value: filter,
+                                icon: Icon(Icons.arrow_drop_down),
+                                underline: SizedBox(),              // Removes the underline
+                                items: <String>['All', 'PENDING', 'SUBMITTED'].map((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value, style: Theme.of(context).textTheme.bodySmall),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  filterWorkShop(newValue!); // Filter the list when a new value is selected
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -311,9 +349,9 @@ class _PartRequisitionState extends State<PartRequisition> {
             ListView.separated(
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(),
-                itemCount: partRequisitionDataList.length,
+                itemCount: partRequisitionDataLists.length,
                 itemBuilder: (context, index) {
-                  final item = partRequisitionDataList[index];
+                  final item = partRequisitionDataLists[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 18, vertical: 12),
@@ -333,12 +371,12 @@ class _PartRequisitionState extends State<PartRequisition> {
                             const SizedBox(width: 4),
                             Expanded(
                               child: Text(
-                                item.pending,
+                                item.status,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall
                                     ?.copyWith(
-                                        color: item.pending == "PENDING"
+                                        color: item.status == "PENDING"
                                             ? Colors.orange
                                             : Colors.green),
                               ),

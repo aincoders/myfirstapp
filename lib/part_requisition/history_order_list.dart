@@ -222,12 +222,12 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                     const SizedBox(width: 4),
                                     Expanded(
                                       child: Text(
-                                        item.pending,
+                                        item.status,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                            color: item.pending == "PENDING"
+                                            color: item.status == "PENDING"
                                                 ? Colors.orange
                                                 : Colors.green),
                                       ),
