@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:myfirstapp/part_requisition/add_to_quote.dart';
@@ -19,6 +17,7 @@ class PartRequisition extends StatefulWidget {
 
 class _PartRequisitionState extends State<PartRequisition> {
   String filter = 'All';
+  String ascendingDesanding = 'All';
   List<PartRequisitionDataModel> partRequisitionDataLists = [];
   TextEditingController searchController = TextEditingController();
 
@@ -29,46 +28,27 @@ class _PartRequisitionState extends State<PartRequisition> {
     partRequisitionDataLists = List.from(partRequisitionDataList);
   }
 
-  // void filterWorkShop(String status) {
-  //   setState(() {
-  //     if (status == 'All') {
-  //       partRequisitionDataLists = partRequisitionDataList;
-  //     } else {
-  //       partRequisitionDataLists = partRequisitionDataList
-  //           .where((part) => part.status == status)
-  //           .toList();
-  //     }
-  //     filter = status;
-  //   });
-  // }
-  void filterParts() {
+  void ascending_desanding() {
     String searchText = searchController.text.toLowerCase();
-    String searchNumber = searchController.text.toLowerCase();
     setState(() {
       partRequisitionDataLists = partRequisitionDataList.where((part) {
-        bool matchesFilter = filter == 'All' || part.status == filter;
-        bool matchesSearch = part.prNo.toLowerCase().contains(searchText);
-        return matchesFilter && matchesSearch;
+        bool orderByFilter = filter == 'All' || part.carCompany == ascendingDesanding;
+        return orderByFilter;
       }).toList();
     });
   }
-  // Future<void> _openCamera() async {
-  //   DropdownButton<String>(
-  //     value: filter,
-  //     icon: Icon(Icons.arrow_drop_down),
-  //     underline: SizedBox(),              // Removes the underline
-  //     items: <String>['All', 'PENDING', 'SUBMITTED'].map((String value) {
-  //       return DropdownMenuItem<String>(
-  //         value: value,
-  //         child: Text(value, style: Theme.of(context).textTheme.bodySmall),
-  //       );
-  //     }).toList(),
-  //     onChanged: (String? newValue) {
-  //       filterWorkShop(newValue!); // Filter the list when a new value is selected
-  //     },
-  //
-  //   );
-  // }
+  void filterParts() {
+    String searchText = searchController.text.toLowerCase();
+    // setState(() {
+    //   partRequisitionDataLists = partRequisitionDataList.where((part) {
+    //     bool matchesFilter = filter == 'All' || part.status == filter;
+    //     bool matchesSearch = part.prNo.toLowerCase().contains(searchText) ||
+    //         part.status.toLowerCase().contains(searchText);
+    //     return matchesFilter && matchesSearch;
+    //   }).toList();
+    // }
+    // );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,50 +71,47 @@ class _PartRequisitionState extends State<PartRequisition> {
                         borderRadius: BorderRadius.circular(6),
                         side:
                             const BorderSide(width: 0.0, color: Colors.orange)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: Container(
-                          height: 30,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Workshop",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall
-                                    ?.copyWith(color: Colors.orange),
-                              ),
-                              const SizedBox(width: 8),
-                              DropdownButton<String>(
-                                value: filter,
-                                icon: const Icon(Icons.arrow_drop_down),
-                                underline: const SizedBox(),
-                                // Removes the underline
-                                items: <String>[
-                                  'All',
-                                  'PENDING',
-                                  'SUBMITTED',
-                                  'ali'
-                                ].map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    filter = value?? "";
-                                    filterParts(); // Apply filter when dropdown changes
-                                  });
-                                },
-                              ),
-                            ],
-                          )),
-                    ),
+                    child: Container(
+                        height: 30,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Workshop",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(color: Colors.orange),
+                            ),
+                            const SizedBox(width: 8),
+                            DropdownButton<String>(
+                              value: filter,
+                              icon: const Icon(Icons.arrow_drop_down),
+                              underline: const SizedBox(),
+                              // Removes the underline
+                              items: <String>[
+                                'All',
+                                'PENDING',
+                                'SUBMITTED',
+                                'ali'
+                              ].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  filter = value ?? "";
+                                  filterParts();
+                                });
+                              },
+                            ),
+                          ],
+                        )),
                   ),
                   const SizedBox(width: 8),
                   Card(
@@ -143,14 +120,14 @@ class _PartRequisitionState extends State<PartRequisition> {
                         borderRadius: BorderRadius.circular(6),
                         side:
                             const BorderSide(width: 0.0, color: Colors.orange)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
+                    child: Container(
+                      height: 30,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         children: [
                           SizedBox(
                             child: Row(
                               children: [
-                                SizedBox(width: 8),
                                 Text(
                                   "Order by",
                                   style: Theme.of(context)
@@ -158,12 +135,39 @@ class _PartRequisitionState extends State<PartRequisition> {
                                       .bodySmall
                                       ?.copyWith(color: Colors.orange),
                                 ),
-                                SizedBox(width: 8),
-                                Text("Ascending",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall),
-                                SizedBox(width: 8),
-                                Icon(Symbols.arrow_drop_down)
+                                const SizedBox(width: 8),
+
+                                DropdownButton<String>(
+                                  value: ascendingDesanding,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  underline: const SizedBox(),
+                                  items: <String>[
+                                    'All',
+                                    'Hyundai',
+                                    'Suzuki',
+                                    'Audi'
+                                  ].map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      ascendingDesanding = value ?? "";
+                                      ascending_desanding();
+                                    });
+                                  },
+                                ),
+
+                                // Text("Ascending",
+                                //     style:
+                                //         Theme.of(context).textTheme.bodySmall),
+                                // const SizedBox(width: 8),
+                                // const Icon(Symbols.arrow_drop_down)
                               ],
                             ),
                           ),
@@ -175,7 +179,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                           SizedBox(
                             child: Row(
                               children: [
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
                                   "With",
                                   style: Theme.of(context)
@@ -183,12 +187,12 @@ class _PartRequisitionState extends State<PartRequisition> {
                                       .bodySmall
                                       ?.copyWith(color: Colors.orange),
                                 ),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text("Due Date",
                                     style:
                                         Theme.of(context).textTheme.bodySmall),
-                                SizedBox(width: 8),
-                                Icon(Symbols.arrow_drop_down)
+                                const SizedBox(width: 8),
+                                const Icon(Symbols.arrow_drop_down)
                               ],
                             ),
                           ),
@@ -384,7 +388,8 @@ class _PartRequisitionState extends State<PartRequisition> {
                                 .textTheme
                                 .labelLarge
                                 ?.copyWith(color: Colors.orange)),
-                        Icon(Icons.keyboard_arrow_right, color: Colors.orange)
+                        const Icon(Icons.keyboard_arrow_right,
+                            color: Colors.orange)
                       ],
                     ),
                   ),
