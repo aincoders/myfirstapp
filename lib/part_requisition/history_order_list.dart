@@ -4,6 +4,8 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_list_data.dart';
 import 'package:myfirstapp/whatsapp/error_page.dart';
 
+import 'main_home_part_requisition/part_requisition_all_file/part_requisition_data_model.dart';
+
 class HistoryOrderList extends StatefulWidget {
   const HistoryOrderList({super.key});
 
@@ -14,6 +16,31 @@ class HistoryOrderList extends StatefulWidget {
 class _HistoryOrderListState extends State<HistoryOrderList> {
   bool isSearchOn = true;
   bool isFilter = true;
+
+  String filter = 'All';
+  String filterAscendingDesanding = 'All';
+  List<PartRequisitionDataModel> partRequisitionDataLists = [];
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // partRequisitionDataLists = partRequisitionDataList;
+    partRequisitionDataLists = List.from(partRequisitionDataList);
+  }
+
+  void filterParts() {
+    String searchText = searchController.text.toLowerCase();
+    setState(() {
+      partRequisitionDataLists = partRequisitionDataList.where((part) {
+        bool matchesFilter = filter == 'All' || part.status == filter;
+        bool matchesSearch = part.prNo.toLowerCase().contains(searchText) ||
+            part.status.toLowerCase().contains(searchText);
+        return matchesFilter && matchesSearch;
+      }).toList();
+    }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +98,15 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: searchController,
                         autofocus: true,
                         decoration: const InputDecoration(
                           hintText: 'Search history',
                           border: InputBorder.none,
                         ),
+                        onChanged: (value) {
+                          filterParts(); // Apply search filter as the user types
+                        },
                       ),
                     ),
                   ],
@@ -92,29 +123,49 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                   elevation: 0.0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6),
-                      side: const BorderSide(width: 0.0, color: Colors.grey)),
-                  child: Padding(
-                    padding: EdgeInsets.all(2),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 8),
-                        Text(
-                          "Workshop",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(color: Colors.grey),
-                        ),
-                        SizedBox(width: 8),
-                        Text("All",
-
-    style: Theme.of(context).textTheme.bodySmall
-                        ),
-                        SizedBox(width: 8),
-                        Icon(Symbols.arrow_drop_down)
-                      ],
-                    ),
-                  ),
+                      side:
+                      const BorderSide(width: 0.0, color: Colors.orange)),
+                  child: Container(
+                      height: 30,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Workshop",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(color: Colors.orange),
+                          ),
+                          const SizedBox(width: 8),
+                          DropdownButton<String>(
+                            value: filter,
+                            icon: const Icon(Icons.arrow_drop_down),
+                            underline: const SizedBox(),
+                            // Removes the underline
+                            items: <String>[
+                              'All',
+                              'PENDING',
+                              'SUBMITTED',
+                              'ali'
+                            ].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                filter = value ?? "";
+                                filterParts();
+                              });
+                            },
+                          ),
+                        ],
+                      )),
                 ),
                 const SizedBox(width: 8),
                 Card(
@@ -126,10 +177,10 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                     padding: const EdgeInsets.all(2),
                     child: Row(
                       children: [
-                         SizedBox(
+                        SizedBox(
                           child: Row(
                             children: [
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 "Order by",
                                 style: Theme.of(context)
@@ -137,13 +188,30 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                     .bodySmall
                                     ?.copyWith(color: Colors.grey),
                               ),
-                              SizedBox(width: 8),
-                              Text("Ascending",
+                              const SizedBox(width: 8),
 
-    style: Theme.of(context).textTheme.bodySmall
-                              ),
-                              SizedBox(width: 8),
-                              Icon(Symbols.arrow_drop_down)
+                              // DropdownButton(
+                              //     value: filter,
+                              //     icon: const Icon(Icons.arrow_drop_down),
+                              //     underline: const SizedBox(),
+                              //     items:<String>[
+                              //   'ali',
+                              // 'sajid',
+                              // 'mohammad'
+                              // ].map((String value){
+                              //   return DropdownMenuItem<String>(value: value, child: Text(value));
+                              // }).toList(), onChanged: (value) {
+                              //       setState(() {
+                              //         filter = value ?? "";
+                              //         filterParts();
+                              //       });
+                              // }),
+
+
+                              Text("Ascending",
+                                  style: Theme.of(context).textTheme.bodySmall),
+                              const SizedBox(width: 8),
+                              const Icon(Symbols.arrow_drop_down)
                             ],
                           ),
                         ),
@@ -152,10 +220,10 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                           height: 24,
                           color: Colors.grey,
                         ),
-                         SizedBox(
+                        SizedBox(
                           child: Row(
                             children: [
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 "With",
                                 style: Theme.of(context)
@@ -163,13 +231,11 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                     .bodySmall
                                     ?.copyWith(color: Colors.grey),
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text("Due Date",
-    style: Theme.of(context).textTheme.bodySmall),
-
-
-                              SizedBox(width: 8),
-                              Icon(Symbols.arrow_drop_down)
+                                  style: Theme.of(context).textTheme.bodySmall),
+                              const SizedBox(width: 8),
+                              const Icon(Symbols.arrow_drop_down)
                             ],
                           ),
                         ),
@@ -191,9 +257,9 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
-                    itemCount: partRequisitionDataList.length,
+                    itemCount: partRequisitionDataLists.length,
                     itemBuilder: (context, index) {
-                      final item = partRequisitionDataList[index];
+                      final item = partRequisitionDataLists[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
@@ -227,9 +293,9 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                             .textTheme
                                             .bodySmall
                                             ?.copyWith(
-                                            color: item.status == "PENDING"
-                                                ? Colors.orange
-                                                : Colors.green),
+                                                color: item.status == "PENDING"
+                                                    ? Colors.orange
+                                                    : Colors.green),
                                       ),
                                     ),
                                     const Badge(
@@ -250,7 +316,9 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                     Expanded(
                                       child: Text(
                                         "${item.carCompany}, ${item.carModel}, ${item.carFuel}",
-                                        style: Theme.of(context).textTheme.titleMedium,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium,
                                       ),
                                     ),
                                   ],
@@ -263,18 +331,22 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                       size: 18,
                                     ),
                                     const SizedBox(width: 6),
-                                     Text(
+                                    Text(
                                       "Due Date",
-                                      style: Theme.of(context).textTheme.labelLarge?.copyWith(color: Colors.red),
-
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge
+                                          ?.copyWith(color: Colors.red),
                                     ),
                                     const SizedBox(width: 4),
                                     const Text(":"),
                                     const SizedBox(width: 4),
                                     Expanded(
                                       child: Text(
-                                        item.date!,
-                                        style: Theme.of(context).textTheme.labelLarge,
+                                        item.date ?? '',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge,
                                       ),
                                     ),
                                   ],
@@ -293,8 +365,11 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                       const SizedBox(width: 6),
                                       Expanded(
                                         child: Text(
-                                          item.notes!,
-                                          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                                          item.notes ?? "",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall
+                                              ?.copyWith(color: Colors.grey),
                                         ),
                                       ),
                                     ],
@@ -312,18 +387,22 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                       padding: const EdgeInsets.all(16),
                                       child: Row(
                                         children: [
-                                           Text("Requested item",
-                                            style: Theme.of(context).textTheme.labelLarge,
+                                          Text(
+                                            "Requested item",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .labelLarge,
                                           ),
                                           const SizedBox(
                                             width: 6,
                                           ),
                                           const Text(":"),
-
                                           Expanded(
                                             child: Text(
                                               "${item.item_1}, ${item.item_2}, ${item.item_3}",
-                                              style: Theme.of(context).textTheme.bodyMedium,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium,
                                             ),
                                           ),
                                         ],

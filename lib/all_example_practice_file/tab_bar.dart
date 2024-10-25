@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myfirstapp/cardview.dart';
-import 'package:myfirstapp/row_column_colour.dart';
+import 'package:myfirstapp/all_example_practice_file/cardview.dart';
+import 'package:myfirstapp/all_example_practice_file/row_column_colour.dart';
 
 class MyTabBarPage extends StatelessWidget {
   const MyTabBarPage({super.key});

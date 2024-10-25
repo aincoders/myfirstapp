@@ -5,7 +5,6 @@ import 'package:myfirstapp/part_requisition/history_order_list.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_data_model.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition_list_data.dart';
 import 'package:myfirstapp/part_requisition/order_list_all_screen/order_list.dart';
-
 import '../../../filter_all_files/search_bar_filter.dart';
 
 class PartRequisition extends StatefulWidget {
@@ -37,17 +36,18 @@ class _PartRequisitionState extends State<PartRequisition> {
       }).toList();
     });
   }
+
   void filterParts() {
     String searchText = searchController.text.toLowerCase();
-    // setState(() {
-    //   partRequisitionDataLists = partRequisitionDataList.where((part) {
-    //     bool matchesFilter = filter == 'All' || part.status == filter;
-    //     bool matchesSearch = part.prNo.toLowerCase().contains(searchText) ||
-    //         part.status.toLowerCase().contains(searchText);
-    //     return matchesFilter && matchesSearch;
-    //   }).toList();
-    // }
-    // );
+    setState(() {
+      partRequisitionDataLists = partRequisitionDataList.where((part) {
+        bool matchesFilter = filter == 'All' || part.status == filter;
+        bool matchesSearch = part.prNo.toLowerCase().contains(searchText) ||
+            part.status.toLowerCase().contains(searchText);
+        return matchesFilter && matchesSearch;
+      }).toList();
+    }
+    );
   }
 
   @override
@@ -88,7 +88,6 @@ class _PartRequisitionState extends State<PartRequisition> {
                               value: filter,
                               icon: const Icon(Icons.arrow_drop_down),
                               underline: const SizedBox(),
-                              // Removes the underline
                               items: <String>[
                                 'All',
                                 'PENDING',
