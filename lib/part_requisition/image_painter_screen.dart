@@ -23,6 +23,7 @@ class ImagePainterScreen extends StatelessWidget {
               context.findRenderObject() as RenderRepaintBoundary;
               final image = await boundary.toImage();
               final byteData = await image.toByteData(format: ImageByteFormat.png);
+              // ignore: unused_local_variable
               final buffer = byteData!.buffer.asUint8List();
               // Here, you can save the image buffer to file or use as needed
               Navigator.of(context).pop(); // Close the painter screen after saving

@@ -33,7 +33,10 @@ class _CheckboxExampleState extends State<CheckboxExample> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                Checkbox(
+                Checkbox(mouseCursor: MouseCursor.uncontrolled,
+                  shape: CircleBorder(
+                    side: BorderSide.none
+                  ),
                   value: _checkbox1,
                   onChanged: (bool? value) {
                     setState(() {
@@ -47,6 +50,7 @@ class _CheckboxExampleState extends State<CheckboxExample> {
             Row(
               children: <Widget>[
                 Checkbox(
+                  activeColor: Colors.red,
                   value: _checkbox2,
                   onChanged: (bool? value) {
                     setState(() {

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:myfirstapp/api_calling/demo_api_calling/second_demo_api_calling.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/main_home_PartRequisition.dart';
 import 'package:myfirstapp/scaffold/main_scaffold.dart';
-import 'package:myfirstapp/scaffold/top_app_bar.dart';
 import 'package:myfirstapp/whatsapp/main_whatsapp.dart';
 
-import '../api_calling/country_list_screen.dart';
-import '../api_calling/photo_dummy_api.dart';
+import '../api_calling/demo_api_calling/demo_api_calling.dart';
+import '../api_calling/put_api_calling/login_screen_put.dart';
 import '../filter_all_files/filter.dart';
-import 'alert_dailogs.dart';
 
 class MyButtonPage extends StatefulWidget {
   const MyButtonPage({super.key});
@@ -65,7 +64,7 @@ class _MyButtonPageState extends State<MyButtonPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>  PhotoListScreen()),
+                          builder: (context) => const SecondDemoApiCalling()),
                     );
                   },
                 ),
@@ -76,8 +75,7 @@ class _MyButtonPageState extends State<MyButtonPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => CountryListScreen()),
+                      MaterialPageRoute(builder: (context) => DemoApiCalling()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -97,7 +95,7 @@ class _MyButtonPageState extends State<MyButtonPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CarPartListScreen(),
+                          builder: (context) => const EmailScreen(),
                         ));
                   },
                   child: const Text("Light Dark Mode"),

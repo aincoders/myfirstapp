@@ -19,7 +19,6 @@ class MyBasicListViewPage extends StatelessWidget {
             title: Text(items[index]),
             subtitle: Text('Subtitle for ${items[index]}'),
             onTap: () {
-              // Handle item tap
             },
           );
         },

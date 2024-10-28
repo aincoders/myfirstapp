@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/bill.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_purchase.dart';
 import 'package:myfirstapp/part_requisition/main_home_part_requisition/part_requisition_all_file/part_requisition.dart';
@@ -14,6 +15,7 @@ class MainHomePartRequisition extends StatefulWidget {
 
 class _MainHomePartRequisitionState extends State<MainHomePartRequisition> {
   int currentPageIndex = 0;
+  bool isDarkMode = false;
 
   final List<String> _titles = ["Home", "Part Purchase", "Bill"];
   final List<Widget> _pages = <Widget>[
@@ -24,50 +26,66 @@ class _MainHomePartRequisitionState extends State<MainHomePartRequisition> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_titles[currentPageIndex]),
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Badge(
-                label: Text('5'),
-                child: Icon(Icons.notifications),
-              )),
-          const CircleAvatar(
-            backgroundImage: AssetImage('assets/images/avatar-1.png'),
-            radius: 16,
-          ),
-          PopupMenuButton<int>(
-              onSelected: (value) {
-                switch (value) {
-                  case 0:
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const MyErrorPage()));
-                    break;
-                }
-              },
-              itemBuilder: (context) =>
-                  [const PopupMenuItem(value: 0, child: Text('Need Help'))])],),
-      body: _pages[currentPageIndex],
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        selectedIndex: currentPageIndex,
-        elevation: 5,
-        destinations: const <Widget>[
-          NavigationDestination(
-              icon: Icon(Icons.assessment), label: "Part Requisition"),
-          NavigationDestination(
-              icon: Icon(Icons.shopping_cart_outlined),
-              label: "Part Purchase"),
-          NavigationDestination(icon: Icon(Icons.receipt_long), label: "Bill"),
-        ],
+    return MaterialApp(
+      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(_titles[currentPageIndex]),
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    isDarkMode = !isDarkMode;
+                  });
+                },
+                icon:  Icon(isDarkMode == true ? Symbols.light_mode : Icons.dark_mode),
+                ),
+
+            IconButton(
+                onPressed: () {},
+                icon: const Badge(
+                  label: Text('5'),
+                  child: Icon(Icons.notifications),
+                )),
+            const CircleAvatar(
+              backgroundImage: AssetImage('assets/images/avatar-1.png'),
+              radius: 16,
+            ),
+            PopupMenuButton<int>(
+                onSelected: (value) {
+                  switch (value) {
+                    case 0:
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const MyErrorPage()));
+                      break;
+                  }
+                },
+                itemBuilder: (context) =>
+                    [const PopupMenuItem(value: 0, child: Text('Need Help'))])
+          ],
+        ),
+        body: _pages[currentPageIndex],
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          selectedIndex: currentPageIndex,
+          elevation: 5,
+          destinations: const <Widget>[
+            NavigationDestination(
+                icon: Icon(Icons.assessment), label: "Part Requisition"),
+            NavigationDestination(
+                icon: Icon(Icons.shopping_cart_outlined),
+                label: "Part Purchase"),
+            NavigationDestination(
+                icon: Icon(Icons.receipt_long), label: "Bill"),
+          ],
+        ),
       ),
     );
   }

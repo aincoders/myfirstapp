@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:myfirstapp/scaffold/top_app_bar.dart';
 import 'package:myfirstapp/all_example_practice_file/swiper_slider.dart';

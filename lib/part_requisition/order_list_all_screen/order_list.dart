@@ -12,32 +12,6 @@ class OrderList extends StatefulWidget {
 class _OrderListState extends State<OrderList> {
   bool isSearch = true;
 
-  final List<Map<String, dynamic>> _list = [
-    {
-      "product_name": "Air Filter",
-      "quantity": "10 Qty",
-      "status": "PENDING",
-      "part_no": "161236902",
-      "notes": "This is test part ",
-      "car_images": "assets/images/garage-1.png",
-    },
-    {
-      "product_name": "Oil Filter",
-      "quantity": "7 Qty",
-      "status": "PENDING",
-      "part_no": "161236902",
-      "notes": "This is test part ",
-      "car_images": "assets/images/avatar-5.png",
-    },
-    {
-      "product_name": "AC Filter",
-      "quantity": "3 Qty",
-      "status": "PENDING",
-      "part_no": "161236902",
-      "notes": "This is test part ",
-      "car_images": "assets/images/garage-2.png",
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +229,7 @@ class _OrderListState extends State<OrderList> {
                                         Row(
                                           children: [
                                             Text(
-                                              item.productName ?? "",
+                                              item.productName,
                                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)
                                             ),
                                             const SizedBox(width: 12),
@@ -271,7 +245,7 @@ class _OrderListState extends State<OrderList> {
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 12),
                                               child: Text(
-                                                item.quantity ?? "",
+                                                item.quantity,
                                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold, color: Colors.red)
 
                                               ),
@@ -279,7 +253,7 @@ class _OrderListState extends State<OrderList> {
                                             Expanded(
                                               child: Text(
                                                 textAlign: TextAlign.end,
-                                                item.status ?? "",
+                                                item.status,
                                                   style: Theme.of(context).textTheme.titleSmall?.copyWith(color: Colors.orange)
 
                                               ),
@@ -301,7 +275,7 @@ class _OrderListState extends State<OrderList> {
                                                       ),
                                                       Expanded(
                                                           child: Text(
-                                                              item.partNo ?? "",
+                                                              item.partNo,
                                                               style: Theme.of(context).textTheme.bodyMedium
 
                                                           )),
@@ -315,7 +289,7 @@ class _OrderListState extends State<OrderList> {
                                                       Expanded(
                                                         child: Expanded(
                                                             child: Text(
-                                                              item.notes ?? "",
+                                                              item.notes,
                                                                 style: Theme.of(context).textTheme.bodyMedium
                                                             )),
                                                       )

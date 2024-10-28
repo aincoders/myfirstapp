@@ -343,7 +343,7 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                     const SizedBox(width: 4),
                                     Expanded(
                                       child: Text(
-                                        item.date ?? '',
+                                        item.date,
                                         style: Theme.of(context)
                                             .textTheme
                                             .labelLarge,
@@ -365,7 +365,7 @@ class _HistoryOrderListState extends State<HistoryOrderList> {
                                       const SizedBox(width: 6),
                                       Expanded(
                                         child: Text(
-                                          item.notes ?? "",
+                                          item.notes,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall

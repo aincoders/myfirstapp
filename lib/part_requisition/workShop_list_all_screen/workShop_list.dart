@@ -85,7 +85,7 @@ class _WorkshopListState extends State<WorkshopList> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
-                              child: Text(item.title!,
+                              child: Text(item.title,
                                   style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                             ),
                             const Icon(Icons.keyboard_arrow_right_outlined),
@@ -96,10 +96,10 @@ class _WorkshopListState extends State<WorkshopList> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(item.phoneNo!,
+                              Text(item.phoneNo,
                                   style: Theme.of(context).textTheme.labelLarge),
                               const SizedBox(height: 2.0),
-                              Text(item.address!,
+                              Text(item.address,
                                   style: Theme.of(context).textTheme.bodySmall),
                             ],
                           ),

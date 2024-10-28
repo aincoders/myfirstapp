@@ -28,7 +28,7 @@ class _PartRequisitionState extends State<PartRequisition> {
   }
 
   void ascending_desanding() {
-    String searchText = searchController.text.toLowerCase();
+    searchController.text.toLowerCase();
     setState(() {
       partRequisitionDataLists = partRequisitionDataList.where((part) {
         bool orderByFilter = filter == 'All' || part.carCompany == ascendingDesanding;
@@ -48,6 +48,13 @@ class _PartRequisitionState extends State<PartRequisition> {
       }).toList();
     }
     );
+  }
+
+  void clearText() {
+    setState(() {
+      searchController.clear();
+      filterParts();
+    });
   }
 
   @override
@@ -228,6 +235,11 @@ class _PartRequisitionState extends State<PartRequisition> {
                         },
                       ),
                     ),
+                    if (searchController.text.isNotEmpty)
+                      IconButton(
+                        onPressed: clearText,
+                        icon: const Icon(Icons.cancel),
+                      ),
                   ],
                 ),
               ),
@@ -411,7 +423,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                             Row(
                               children: [
                                 Text(
-                                  item.prNo!,
+                                  item.prNo,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall
@@ -478,7 +490,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                                 const SizedBox(width: 4),
                                 Expanded(
                                   child: Text(
-                                    item.date!,
+                                    item.date,
                                     style:
                                         Theme.of(context).textTheme.labelLarge,
                                   ),
@@ -498,7 +510,7 @@ class _PartRequisitionState extends State<PartRequisition> {
                                   const SizedBox(width: 6),
                                   Expanded(
                                     child: Text(
-                                      item.notes!,
+                                      item.notes,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall
