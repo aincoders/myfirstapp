@@ -2,10 +2,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 import 'login_model.dart';
 
 class ApiService {
+
   final Dio _dio = Dio();
 
   ApiService() {
@@ -15,7 +17,7 @@ class ApiService {
     _dio.options.receiveTimeout = const Duration(seconds: 5); // 5 seconds
   }
 
-  // POST request to add email
+  ///Post Api--->
   Future<int?> postUserEmail(String? email) async {
     try {
       final response = await _dio.post(
@@ -36,50 +38,32 @@ class ApiService {
   }
 
 
-  Future<int?> getUserItem(int? id) async {
+
+  ///Get Api--->
+  Future<List<UserModel>> getUserItem() async {
     try {
-      final response = await _dio.get('user/email$id');
-      print("Result Statuscode-=-=->${response.statusCode}");
-      return response.statusCode;
-    } on DioException catch (e){
-      if(e.response != null){
-        throw Exception('Server error: ${e.response!.statusCode}');
+      final response = await _dio.get('user/email');
+      if (response.statusCode == 200) {
+        List<dynamic> jsonList = response.data['data']; // Adjust if data is nested
+        List<UserModel> secondDemo =
+        jsonList.map((json) => UserModel.fromJson(json)).toList();
+        return secondDemo;
+      } else {
+        throw Exception('Failed to fetch emails: ${response.statusMessage}');
       }
-      else {
-        throw Exception('Network error: ${e.message}');
-      }
+    } on DioException catch (e) {
+      debugPrint('Error fetching data: $e');
+      rethrow;
     }
   }
 
 
-
-
-  // GET request to retrieve emails
-  // Future<List<UserModel>> getUserEmails() async {
-  //   try {
-  //     final response = await _dio.get('user/email');
-  //
-  //     if (response.statusCode == 200) {
-  //       List<dynamic> data = response.data['data'];
-  //       return data.map((json) => UserModel.fromJson(json)).toList();
-  //     } else {
-  //       throw Exception('Failed to fetch emails: ${response.statusMessage}');
-  //     }
-  //   } on DioException catch (e) {
-  //     if (e.response != null) {
-  //       throw Exception('Server error: ${e.response!.statusCode}');
-  //     } else {
-  //       throw Exception('Network error: ${e.message}');
-  //     }
-  //   }
-  // }
-
-  // Update Api
-
+  ///Put Api--->
   Future<void> updateUserEmail(int? id, String? email) async {
     debugPrint("Email=--->$email");
     try {
-      final response = await _dio.put('user/email/$id',
+      final response = await _dio.put(
+        'user/email/$id',
         data: {
           'email': email,
         },
@@ -101,8 +85,8 @@ class ApiService {
     }
   }
 
-// api_service.dart
 
+  ///Delete Api--->
   Future<void> deleteUserEmail(int userId) async {
     try {
       final response = await _dio.delete('user/email/$userId');
@@ -122,3 +106,5 @@ class ApiService {
     }
   }
 }
+
+

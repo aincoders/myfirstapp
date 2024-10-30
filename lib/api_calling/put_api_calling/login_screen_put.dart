@@ -1,7 +1,4 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
-import '../demo_api_calling/second_demo_try_catch_api.dart';
 import 'login_dio_helper.dart';
 import 'login_model.dart';
 
@@ -21,13 +18,14 @@ class _EmailScreenState extends State<EmailScreen> {
   UserModel? userModel;
 
 
+  ///init state--->
   @override
   void initState() {
     super.initState();
-    _getUserEmails; // Fetch initial data when screen loads
+    _getUserEmails();
+    debugPrint("get---->>---calling");
   }
 
-  //Condition Api
 
   Future<void> _postUserEmail() async {
     setState(() {
@@ -35,74 +33,16 @@ class _EmailScreenState extends State<EmailScreen> {
       _message = '';
     });
     if (userModel?.id != null) {
-      _updateUserEmail(userModel?.id,_emailController.text);
+      _updateUserEmail(userModel?.id, _emailController.text);
       debugPrint("Update");
-    }
-    else if (userModel?.id != null) {
+    } else{
       _addNewUserEmail(_emailController.text);
       debugPrint("ADD");
     }
-
-  }
-
-  Future<void> _getUserEmails(int? id) async {
-    deleteSecondDemo(id).then((result) {
-      if (result != null) {
-        if (result == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-                content: Text('success to delete item from server.')),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to delete item from server.')),
-          );
-        }
-      }
-    });
   }
 
 
-
-  //Get Api
-
-  // Future<void> _getUserEmails() async {
-  //   try {
-  //     final emails = await _apiService.getUserEmail();
-  //     setState(() {
-  //       _emails = emails;
-  //     });
-  //   }
-  //   catch (e) {
-  //     setState(() {
-  //       _message = 'Error fetching emails: $e';
-  //     });
-  //   }
-  // }
-
-  //Update Api
-
-  Future<void> _updateUserEmail(int? id, String? email) async {
-    try {
-      await _apiService.updateUserEmail(id, email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("User email updated successfully.")),
-      );
-      _getUserEmails();
-      _emailController.clear();
-    } catch (e) {
-      setState(() {
-        _message = 'Error updating email: $e';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-
-  //Post Api
+  ///Post Api--->
   Future<void> _addNewUserEmail(String? email) async {
     try {
       await _apiService.postUserEmail(email);
@@ -124,8 +64,50 @@ class _EmailScreenState extends State<EmailScreen> {
   }
 
 
-  //Delete Api
 
+
+
+  ///Get Api--->
+  Future<void> _getUserEmails() async {
+    try {
+      final emails = await _apiService.getUserItem();
+      debugPrint('Fetched emails: $emails');
+      setState(() {
+        _emails = emails;
+      });
+    } catch (e) {
+      setState(() {
+        _message = 'Error fetching emails: $e';
+      });
+    }
+  }
+
+
+
+  
+
+  ///Put(Update) Api--->
+  Future<void> _updateUserEmail(int? id, String? email) async {
+    try {
+      await _apiService.updateUserEmail(id, email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("User email updated successfully.")),
+      );
+      _getUserEmails();
+      _emailController.clear();
+    } catch (e) {
+      setState(() {
+        _message = 'Error updating email: $e';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  
+  ///Delete Api--->
   Future<void> _deleteUser(int? userId) async {
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -229,4 +211,5 @@ class _EmailScreenState extends State<EmailScreen> {
       ),
     );
   }
+
 }
