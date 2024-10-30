@@ -34,38 +34,40 @@ class _EmailScreenState extends State<EmailScreen> {
     });
     if (userModel?.id != null) {
       _updateUserEmail(userModel?.id, _emailController.text);
+      userModel = null; // Clear the userModel after update
+
       debugPrint("Update");
     } else{
       _addNewUserEmail(_emailController.text);
       debugPrint("ADD");
     }
+    _emailController.clear(); // Clear the text field after the operation
+    setState(() {
+      _isLoading = false; // Reset loading state
+    });
   }
 
 
   ///Post Api--->
   Future<void> _addNewUserEmail(String? email) async {
     try {
-      await _apiService.postUserEmail(email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("User email updated successfully.")),
-      );
-      _getUserEmails();
-      userModel = UserModel();
-      _emailController.clear();
+      final result = await _apiService.postUserEmail(email);
+      if (result != null && result == 200) {
+        _getUserEmails();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email added successfully.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to add email.')),
+        );
+      }
     } catch (e) {
       setState(() {
-        _message = 'Error updating email: $e';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
+        _message = 'Error adding email: $e';
       });
     }
   }
-
-
-
-
 
   ///Get Api--->
   Future<void> _getUserEmails() async {
@@ -83,38 +85,35 @@ class _EmailScreenState extends State<EmailScreen> {
   }
 
 
-
-  
-
   ///Put(Update) Api--->
   Future<void> _updateUserEmail(int? id, String? email) async {
     try {
-      await _apiService.updateUserEmail(id, email);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("User email updated successfully.")),
-      );
-      _getUserEmails();
-      _emailController.clear();
+      final result = await _apiService.updateUserEmail(id, email);
+      if (result != null && result == 200) {
+        _getUserEmails();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email updated successfully.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to update email.')),
+        );
+      }
     } catch (e) {
       setState(() {
         _message = 'Error updating email: $e';
       });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
-  
+
+
   ///Delete Api--->
   Future<void> _deleteUser(int? userId) async {
     if (userId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("User ID is null. Cannot delete email.")),
       );
-      debugPrint("dedededetete");
-
       return;
     }
     try {
