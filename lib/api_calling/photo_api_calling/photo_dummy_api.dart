@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myfirstapp/api_calling/photo_dummy_api_data_model.dart';
+import 'package:myfirstapp/api_calling/photo_api_calling/photo_dummy_api_data_model.dart';
 
-import 'country_first_api/api_try_file.dart';
+import '../country_first_api/api_try_file.dart';
 
 class PhotoListScreen extends StatefulWidget {
   @override

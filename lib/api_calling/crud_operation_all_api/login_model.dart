@@ -1,6 +1,3 @@
-// user_model.dart
-
-
 class UserModel {
   String? email;
   int? id;

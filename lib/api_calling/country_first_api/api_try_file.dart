@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'package:myfirstapp/api_calling/photo_dummy_api_data_model.dart';
+import 'package:myfirstapp/api_calling/photo_api_calling/photo_dummy_api_data_model.dart';
 import 'api_data_model_file.dart';
 
 final Dio dio = Dio();

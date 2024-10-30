@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'login_dio_helper.dart';
 import 'login_model.dart';
 
@@ -13,10 +14,10 @@ class _EmailScreenState extends State<EmailScreen> {
   final TextEditingController _emailController = TextEditingController();
   final ApiService _apiService = ApiService();
   bool _isLoading = false;
+  bool _isEditing = false;
   String _message = '';
   List<UserModel> _emails = [];
   UserModel? userModel;
-
 
   ///init state--->
   @override
@@ -26,27 +27,25 @@ class _EmailScreenState extends State<EmailScreen> {
     debugPrint("get---->>---calling");
   }
 
-
   Future<void> _postUserEmail() async {
     setState(() {
       _isLoading = true;
       _message = '';
     });
-    if (userModel?.id != null) {
-      _updateUserEmail(userModel?.id, _emailController.text);
+    if (_isEditing && userModel?.id != null) {
+      await _updateUserEmail(userModel?.id, _emailController.text);
       userModel = null; // Clear the userModel after update
-
       debugPrint("Update");
-    } else{
-      _addNewUserEmail(_emailController.text);
+    } else {
+      await _addNewUserEmail(_emailController.text);
       debugPrint("ADD");
     }
+    _isEditing = false; // Reset to add mode
     _emailController.clear(); // Clear the text field after the operation
     setState(() {
       _isLoading = false; // Reset loading state
     });
   }
-
 
   ///Post Api--->
   Future<void> _addNewUserEmail(String? email) async {
@@ -84,7 +83,6 @@ class _EmailScreenState extends State<EmailScreen> {
     }
   }
 
-
   ///Put(Update) Api--->
   Future<void> _updateUserEmail(int? id, String? email) async {
     try {
@@ -105,8 +103,6 @@ class _EmailScreenState extends State<EmailScreen> {
       });
     }
   }
-
-
 
   ///Delete Api--->
   Future<void> _deleteUser(int? userId) async {
@@ -152,7 +148,7 @@ class _EmailScreenState extends State<EmailScreen> {
                 ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: _postUserEmail,
-                    child: const Text('Submit Email'),
+                    child: Text(_isEditing == true ? 'Update Email' : 'Submit Email'),
                   ),
             const SizedBox(height: 16),
             Text(
@@ -184,6 +180,9 @@ class _EmailScreenState extends State<EmailScreen> {
                                     onPressed: () {
                                       _emailController.text = item.email ?? "";
                                       userModel = item;
+                                      setState(() {
+                                        _isEditing = true; // Set edit mode
+                                      });
                                     },
                                     icon: const Icon(
                                       Icons.edit,
@@ -210,5 +209,4 @@ class _EmailScreenState extends State<EmailScreen> {
       ),
     );
   }
-
 }
