@@ -12,7 +12,7 @@ class ApiService {
 
   ApiService() {
     // Set base options for Dio
-    _dio.options.baseUrl = 'http://192.168.0.109:3355/';
+    _dio.options.baseUrl = 'http://192.168.0.111:3355/';
     _dio.options.connectTimeout = const Duration(seconds: 5); // 5 seconds
     _dio.options.receiveTimeout = const Duration(seconds: 5); // 5 seconds
   }
@@ -38,8 +38,6 @@ class ApiService {
   }
 
 
-
-
   ///Get Api--->
   Future<List<UserModel>> getUserItem() async {
     try {
@@ -59,7 +57,7 @@ class ApiService {
   }
 
 
-
+  ///Put Api--->
   Future<int?> updateUserEmail(int? id, String? email) async {
     debugPrint("Email=--->$email");
     try {
@@ -70,7 +68,7 @@ class ApiService {
         },
       );
       debugPrint("Response-=--->${response.data}");
-        return response.statusCode;
+      return response.statusCode;
     } on DioException catch (e) {
       if (e.response != null) {
         throw Exception('Server error: ${e.response!.statusCode}');
@@ -79,37 +77,6 @@ class ApiService {
       }
     }
   }
-
-
-
-
-
-  ///Put Api--->
-  // Future<void> updateUserEmail(int? id, String? email) async {
-  //   debugPrint("Email=--->$email");
-  //   try {
-  //     final response = await _dio.put(
-  //       'user/email/$id',
-  //       data: {
-  //         'email': email,
-  //       },
-  //     );
-  //     debugPrint("Response-=--->${response.data}");
-  //     if (response.statusCode == 200) {
-  //       // Update successful
-  //       return;
-  //     } else {
-  //       throw Exception('Failed to update email: ${response.statusMessage}');
-  //     }
-  //   } on DioException catch (e) {
-  //     if (e.response != null) {
-  //       throw Exception('Server error: ${e.response!.statusCode}');
-  //     } else {
-  //       throw Exception('Network error: ${e.message}');
-  //     }
-  //   }
-  // }
-
 
   ///Delete Api--->
   Future<void> deleteUserEmail(int userId) async {
